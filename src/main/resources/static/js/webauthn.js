@@ -1,6 +1,6 @@
 async function registerAsync() {
     try {
-        const optionRes = await postAttestationOptions();
+        const optionsRes = await postAttestationOptions();
         const optionsJSON = await optionsRes.json();
         const credential = await createCredential(optionsJSON);
         const response = await registerFinish(credential);
@@ -54,4 +54,24 @@ function registerFinish(credential) {
             'Content-Type': 'application/json'
         }
     })
+}
+
+function redirectToSignInPage(response) {
+    console.log(response)
+    location.href = 'signin.html'
+}
+
+// 文字列をArrayBufferに変換
+function stringToArrayBuffer(string) {
+    return new TextEncoder().encode(string);
+}
+
+// Base64文字列をArrayBufferにデコード
+function base64ToArrayBuffer(base64String) {
+    return Uint8Array.from(atob(base64String), c => c.charCodeAt(0));
+}
+
+// ArrayBufferをBase64文字列にエンコード
+function arrayBufferToBase64(arrayBuffer) {
+    return btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
 }
