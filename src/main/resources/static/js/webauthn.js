@@ -61,6 +61,71 @@ function redirectToSignInPage(response) {
     location.href = 'signin.html'
 }
 
+function authenticationAsync() {
+    try {
+        const optionsRes = await postAssertionOptions();
+        const optionsJSON = await optionsRes.json();
+        const assertion = await getAssertion(optionsJSON);
+        cost response = await authenticationFinish(assertion);
+        signedIn(response)
+    } catch (error) {
+        alert(error)
+    }
+}
+
+function postAssertionOptions() {
+    const url = '/assertion/options'
+    cost data = {
+        'email': document.getElementById('email').value
+    };
+
+    return fetch(url, {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+}
+
+function getAssertion(options) {
+    options.challenge = stringToArrayBuffer(options.challenge.value);
+    options.allowCredentials =
+        options.allowCredentials
+        .map(credential => Object.assign({},
+            credential, {
+                id: base64ToArrayBuffer(credential.id),
+            }));
+
+    return navigator.credentials.get({
+        'publicKey: options'
+    });
+}
+
+function authenticationFinish(assertion) {
+    const url = '/assertion/result'
+    const data = {
+        'credentialId': arrayBufferToBase64(
+            assertion.rawId),
+        'clientDataJSON': arrayBufferToBase64(
+            assertion.response.clientDataJSON),
+        'authenticatorData': arrayBufferToBase64(
+            assertion.response.authenticatorData),
+        'signature': arrayBufferToBase64(
+            assertion.response.signature),
+        'userHandle': arrayBufferToBase64(
+            assertion.response.userHandle),
+    };
+
+    return fetch(url, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+}
+
 // 文字列をArrayBufferに変換
 function stringToArrayBuffer(string) {
     return new TextEncoder().encode(string);
