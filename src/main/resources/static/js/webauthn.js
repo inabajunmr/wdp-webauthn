@@ -61,12 +61,12 @@ function redirectToSignInPage(response) {
     location.href = 'signin.html'
 }
 
-function authenticationAsync() {
+async function authenticationAsync() {
     try {
         const optionsRes = await postAssertionOptions();
         const optionsJSON = await optionsRes.json();
         const assertion = await getAssertion(optionsJSON);
-        cost response = await authenticationFinish(assertion);
+        const response = await authenticationFinish(assertion);
         signedIn(response)
     } catch (error) {
         alert(error)
@@ -75,7 +75,7 @@ function authenticationAsync() {
 
 function postAssertionOptions() {
     const url = '/assertion/options'
-    cost data = {
+    const data = {
         'email': document.getElementById('email').value
     };
 
@@ -98,7 +98,7 @@ function getAssertion(options) {
             }));
 
     return navigator.credentials.get({
-        'publicKey: options'
+        'publicKey': options
     });
 }
 
