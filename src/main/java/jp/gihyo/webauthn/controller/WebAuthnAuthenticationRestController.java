@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.logging.Logger;
 
 @RestController
@@ -39,6 +40,8 @@ public class WebAuthnAuthenticationRestController {
         var session = servletRequest.getSession();
         session.setAttribute(ASSERTION_CHALLENGE_KEY, options.getChallenge());
 
+        logger.info("Options:" + options.toString());
+
         return options;
     }
 
@@ -48,6 +51,17 @@ public class WebAuthnAuthenticationRestController {
         public byte[] authenticatorData;
         public byte[] signature;
         public byte[] userHandle;
+
+        @Override
+        public String toString() {
+            return "AuthenticationResultParam{" +
+                    "credentialId=" + Arrays.toString(credentialId) +
+                    ", clientDataJSON=" + Arrays.toString(clientDataJSON) +
+                    ", authenticatorData=" + Arrays.toString(authenticatorData) +
+                    ", signature=" + Arrays.toString(signature) +
+                    ", userHandle=" + Arrays.toString(userHandle) +
+                    '}';
+        }
     }
 
     @PostMapping("/assertion/result")
@@ -56,6 +70,7 @@ public class WebAuthnAuthenticationRestController {
             HttpServletRequest servletRequest) throws IOException {
         var httpSession = servletRequest.getSession();
         var challenge = (Challenge) httpSession.getAttribute(ASSERTION_CHALLENGE_KEY);
+        logger.info("Call:" + servletRequest.getRequestURI() + " params:" + params);
 
         authenticationService.assertionFinish(
                 challenge,

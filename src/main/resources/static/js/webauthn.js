@@ -1,9 +1,13 @@
 async function registerAsync() {
     try {
         const optionsRes = await postAttestationOptions();
+        console.log("optionRes:%s", JSON.stringify(optionsRes));
         const optionsJSON = await optionsRes.json();
+        console.log("optionsJSON:%s", JSON.stringify(optionsJSON));
         const credential = await createCredential(optionsJSON);
+        console.log("credential:%s", JSON.stringify(credential));
         const response = await registerFinish(credential);
+        console.log("response:%s", JSON.stringify(response));
         redirectToSignInPage(response)
     } catch (error) {
         alert(error)
@@ -58,15 +62,19 @@ function registerFinish(credential) {
 
 function redirectToSignInPage(response) {
     console.log(response)
-    location.href = 'signin.html'
+//    location.href = 'signin.html'
 }
 
 async function authenticationAsync() {
     try {
         const optionsRes = await postAssertionOptions();
+        console.log("optionRes:%s", JSON.stringify(optionsRes));
         const optionsJSON = await optionsRes.json();
+        console.log("optionsJSON:%s", JSON.stringify(optionsJSON));
         const assertion = await getAssertion(optionsJSON);
+        console.log("assertion:%s", JSON.stringify(assertion));
         const response = await authenticationFinish(assertion);
+        console.log("response:%s", JSON.stringify(response));
         signedIn(response)
     } catch (error) {
         alert(error)

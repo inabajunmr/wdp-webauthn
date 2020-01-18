@@ -36,7 +36,7 @@ public class CredentialRepository {
     }
 
     public List<Credential> finds(byte[] userId) {
-        var sql = "SELECT FROM credential WHERE user_id=:userId";
+        var sql = "SELECT * FROM credential WHERE user_id=:userId";
             return jdbc.query(
                     sql,
                     new MapSqlParameterSource()

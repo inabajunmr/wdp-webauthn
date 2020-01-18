@@ -74,8 +74,9 @@ public class WebAuthnAuthenticationService {
                                 byte[] signature) throws IOException {
         var origin = Origin.create("http://localhost:8080");
         var rpId = "localhost";
+
         var challengeBase64 = new DefaultChallenge(
-                Base64.getEncoder().encodeToString(challenge.getValue())
+                Base64.getEncoder().encode(challenge.getValue())
         );
 
         var serverProperty = new ServerProperty(
@@ -107,7 +108,6 @@ public class WebAuthnAuthenticationService {
 
         var validator = new WebAuthnAuthenticationContextValidator();
 
-        // TODO
         var response = validator
                 .validate(authenticationContext, authenticator);
         var currentCounter = response

@@ -19,7 +19,7 @@ public class UserRepository {
     }
 
     public Optional<User> find(String email) {
-        var sql = "SELECT FROM user WHERE email=:email";
+        var sql = "SELECT * FROM user WHERE email=:email";
         try {
             var user = jdbc.queryForObject(
                     sql,

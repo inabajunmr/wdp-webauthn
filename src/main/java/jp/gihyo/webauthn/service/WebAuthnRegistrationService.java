@@ -19,6 +19,7 @@ import java.security.SecureRandom;
 import java.util.Base64;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,6 +27,7 @@ public class WebAuthnRegistrationService {
 
     private final CredentialRepository credentialRepository;
     private final UserRepository userRepository;
+    private final Logger logger = Logger.getLogger(WebAuthnRegistrationService.class.getName());
 
     public WebAuthnRegistrationService(CredentialRepository credentialRepository,
                                        UserRepository userRepository) {
@@ -164,7 +166,9 @@ public class WebAuthnRegistrationService {
         credential.publicKey = publicKeyBin;
         credential.signatureCounter = signatureCounter;
         credential.userId = user.id;
+
         credentialRepository.insert(credential);
+        logger.info("Create credential:" + credential);
     }
 
 }
