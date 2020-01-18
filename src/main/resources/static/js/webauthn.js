@@ -126,6 +126,15 @@ function authenticationFinish(assertion) {
     });
 }
 
+
+function signedIn(response) {
+    if (response.ok) {
+        alert('ログインしました');
+    } else {
+        alert(response);
+    }
+}
+
 // 文字列をArrayBufferに変換
 function stringToArrayBuffer(string) {
     return new TextEncoder().encode(string);

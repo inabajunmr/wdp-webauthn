@@ -54,7 +54,7 @@ public class WebAuthnRegistrationService {
         );
         var rs256 = new PublicKeyCredentialParameters(
                 PublicKeyCredentialType.PUBLIC_KEY,
-                COSEAlgorithmIdentifier.ES256
+                COSEAlgorithmIdentifier.RS256
         );
         var publicKeyCredParams = List.of(es256, rs256);
 
