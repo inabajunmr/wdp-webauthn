@@ -54,4 +54,12 @@ public class CredentialRepository {
                 .addValue("signatureCounter", credential.signatureCounter));
     }
 
+    public void update(Credential credential) {
+        var sql = "UPDATE credential " +
+            "SET signature_counter = :signatureCounter " +
+            " WHERE credential_id = :credentialId";
+        jdbc.update(sql, new MapSqlParameterSource()
+        .addValue("credentialId", credential.credentialId)
+        .addValue("signatureCounter", credential.signatureCounter));
+    }
 }

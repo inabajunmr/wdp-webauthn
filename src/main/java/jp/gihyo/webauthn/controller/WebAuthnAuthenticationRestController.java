@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.logging.Logger;
 
 @RestController
@@ -52,10 +53,16 @@ public class WebAuthnAuthenticationRestController {
     @PostMapping("/assertion/result")
     public void postAssertionResult(
             @RequestBody AuthenticationResultParam params,
-            HttpServletRequest servletRequest) {
+            HttpServletRequest servletRequest) throws IOException {
         var httpSession = servletRequest.getSession();
-        var challenge = (Challenge)httpSession.getAttribute(ASSERTION_CHALLENGE_KEY);
+        var challenge = (Challenge) httpSession.getAttribute(ASSERTION_CHALLENGE_KEY);
 
-
-    )
+        authenticationService.assertionFinish(
+                challenge,
+                params.credentialId,
+                params.clientDataJSON,
+                params.authenticatorData,
+                params.signature
+        );
+    }
 }

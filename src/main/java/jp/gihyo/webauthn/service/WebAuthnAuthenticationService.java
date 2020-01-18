@@ -107,6 +107,12 @@ public class WebAuthnAuthenticationService {
 
         var validator = new WebAuthnAuthenticationContextValidator();
 
-        // TODO 
+        // TODO
+        var response = validator
+                .validate(authenticationContext, authenticator);
+        var currentCounter = response
+                .getAuthenticatorData().getSignCount();
+        credential.signatureCounter = currentCounter;
+        credentialRepository.update(credential);
     }
 }
